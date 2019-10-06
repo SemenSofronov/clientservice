@@ -1,0 +1,37 @@
+version: "3"
+services:
+  db:
+    build:
+      ./postgres
+    restart: always
+#    image: postgresdb
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  client:
+    build:
+      .
+#    image: clientservice
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+
+  orders:
+    build:
+      ../orderservice/
+#    image: orderservice
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+      - client
+
+
